@@ -1,0 +1,117 @@
+En esta sección se analizan los resultados empíricos de cuatro algoritmos de ordenamiento y dos de multiplicación de matrices obtenidos con el entorno en C++. Se fijó un tiempo límite de 5 minutos por prueba, durando la ejecución 16 minutos en matrices y 1 hora con 32 minutos en arreglos.
+
+\subsection{Multiplicación de Matrices}
+
+Se evaluaron dimensiones $N \in \{16, 64, 256, 1024\}$, estructuras (densa, diagonal, dispersa) y dominios ($D_0, D_{10}$).
+
+\begin{table}[H]
+    \centering
+    \small
+    \begin{tabular}{|l|c|c|c|}
+        \hline
+        \textbf{Algoritmo} & \textbf{Complejidad Teórica} & \textbf{Tiempo $N=256$ (ms)} & \textbf{Tiempo $N=1024$ (ms)} \\
+        \hline
+        Naive & $O(n^3)$ \cite{gfg_naive} & 6.50 & 870.00 \\
+        Strassen & $O(n^{2.81})$ \cite{gfg_strassen} & 1050.00 & 52500.00 \\
+        \hline
+    \end{tabular}
+    \caption{Tiempos empíricos en multiplicación de matrices.}
+    \label{tab:matrix_times}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../code/matrix_multiplication/data/plots/1_matrix_growth_log.png}
+        \caption{Crecimiento de tiempo vs $N$ (log-log).}
+        \label{fig:matrix_growth}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../code/matrix_multiplication/data/plots/2_matrix_type_N1024.png}
+        \caption{Tiempo según estructura ($N=1024$).}
+        \label{fig:matrix_type}
+    \end{minipage}
+\end{figure}
+
+\noindent\textbf{Análisis de Crecimiento Asintótico y Estructura:} Pese a que la teoría otorga a Strassen $O(N^{2.81})$ \cite{gfg_strassen} frente al $O(N^3)$ \cite{gfg_naive} de Naive, en la práctica Naive es sistemáticamente más rápido hasta $N=1024$, marcando $870$ ms frente a $52.500$ ms. Asimismo, en escala logarítmica el tiempo de cada método es constante en matrices densas, diagonales o dispersas, operando a ciegas sin omitir ceros.
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../code/matrix_multiplication/data/plots/4_matrix_domain_N1024.png}
+        \caption{Tiempo según dominio ($N=1024$).}
+        \label{fig:matrix_domain}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../code/matrix_multiplication/data/plots/3_matrix_memory.png}
+        \caption{Uso de memoria (KB) vs $N$.}
+        \label{fig:matrix_memory}
+    \end{minipage}
+\end{figure}
+
+\noindent\textbf{Análisis de Dominio y Memoria:} En $D_0$ y $D_{10}$ ambos algoritmos mantienen tiempos prácticamente idénticos a los reportados en la Tabla \ref{tab:matrix_times}, sin variación entre dominios. En memoria, Naive tiene un gasto marginal con $232$ KB en $N=1024$, mientras que Strassen sufre una subida marcada alcanzando $4.270$ KB por las submatrices de la recursión.
+
+\subsection{Algoritmos de Ordenamiento}
+
+Se evaluaron tamaños $N \in \{10, 10^3, 10^5, 10^7\}$, distribuciones iniciales (ascendente, descendente, aleatorio) y dominios ($D_1, D_7$).
+
+\begin{table}[H]
+    \centering
+    \small
+    \begin{tabular}{|l|c|c|c|}
+        \hline
+        \textbf{Algoritmo} & \textbf{Complejidad Teórica} & \textbf{Tiempo $N=10^5$ (ms)} & \textbf{Tiempo $N=10^7$ (ms)} \\
+        \hline
+        \texttt{std::sort} & $O(n \log n)$ \cite{gfg_stdsort} & 1.52 & 480.20 \\
+        Merge Sort & $O(n \log n)$ \cite{gfg_mergesort} & 4.75 & 850.10 \\
+        Quick Sort & $O(n \log n)$ prom. \cite{gfg_quicksort} & 61.80 & 145200.00 \\
+        Patience Sort & $O(n \log n)$ prom. \cite{gfg_patience} & 4820.00 & 228000.00 \\
+        \hline
+    \end{tabular}
+    \caption{Tiempos empíricos en algoritmos de ordenamiento.}
+    \label{tab:sorting_summary}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../code/sorting/data/plots/1_sorting_growth_log.png}
+        \caption{Tiempo vs $N$ (log-log).}
+        \label{fig:sorting_growth}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../code/sorting/data/plots/2_sorting_type_N10000000.png}
+        \caption{Orden inicial ($N=10^7$).}
+        \label{fig:sorting_dist}
+    \end{minipage}
+\end{figure}
+
+\noindent\textbf{Crecimiento Base y Distribución:} A partir de la Tabla \ref{tab:sorting_summary} y la Figura \ref{fig:sorting_growth}, \texttt{std::sort} \cite{gfg_stdsort} y Merge Sort \cite{gfg_mergesort} ordenan $10^7$ datos en menos de un segundo ($\sim 850$ ms), pero Quick Sort \cite{gfg_quicksort} sufre un frenazo en $N=10^7$ alcanzando $\sim 150.000$ ms, igualando a Patience Sort \cite{gfg_patience}. En distribución, \texttt{std::sort} y Merge Sort se mantienen bajo $1.000$ ms, Quick Sort marca una barra fija de $\sim 150.000$ ms en los tres estados, y Patience Sort oscila entre $300.000$ ms (ascendente) y $150.000$ ms (descendente).
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../code/sorting/data/plots/3_sorting_domain_N10000000.png}
+        \caption{Impacto del dominio ($N=10^7$).}
+        \label{fig:sorting_domain}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../code/sorting/data/plots/4_sorting_memory.png}
+        \caption{Memoria (KB) vs $N$.}
+        \label{fig:sorting_memory}
+    \end{minipage}
+\end{figure}
+
+\noindent\textbf{Impacto del Dominio y Memoria:} En $D_1$, Quick Sort y Patience Sort marcan sus picos máximos cercanos a $300.000$ ms, mientras que en $D_7$ Quick Sort baja al rango de $500$--$800$ ms y Patience Sort a $\sim 155.000$ ms. En memoria a $N=10^7$, \texttt{std::sort} ($\sim 20.500$ KB) y Merge Sort ($\sim 19.500$ KB) registran el mayor consumo, seguidos por Quick Sort ($\sim 1.500$ KB) y Patience Sort ($\sim 0$ KB).

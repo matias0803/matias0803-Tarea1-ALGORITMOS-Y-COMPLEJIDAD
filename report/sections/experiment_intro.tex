@@ -1,0 +1,8 @@
+Para garantizar la reproducibilidad del análisis empírico, los experimentos se ejecutaron bajo un entorno controlado con las siguientes especificaciones:
+\begin{itemize}
+    \item \textbf{Hardware:} Intel Core i5-14400F, 16 GB de RAM DDR4.
+    \item \textbf{Sistema Operativo:} CachyOS Linux (7.2.3-1-cachyos), basado en Arch Linux.
+    \item \textbf{Compilador:} C++17 con GCC \texttt{g++} 16.2.1, optimización \texttt{-O3} y banderas \texttt{-Wall}, \texttt{-Wextra}.
+    \item \textbf{Datasets:} arreglos de hasta $10^7$ elementos (estados aleatorio, ascendente, descendente; dominios $D_1$, $D_7$) y matrices de hasta $1024 \times 1024$ (tipos densa, diagonal, dispersa; dominios $D_0$, $D_{10}$), generados con \texttt{array\_generator.py} y \texttt{matrix\_generator.py}.
+    \item \textbf{Medición:} tiempos y uso de memoria se registraron en archivos \texttt{.csv} por algoritmo y tipo de entrada; los gráficos se generaron automáticamente en Python con \texttt{pandas} y \texttt{matplotlib}.
+\end{itemize}
