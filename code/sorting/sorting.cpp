@@ -115,7 +115,7 @@ int main() {
 
             t.detach();
 
-            // Espera máxima de 15 minutos por prueba (900000 ms)
+          
             if (future.wait_for(std::chrono::minutes(5)) == std::future_status::timeout) {
                 std::cout << "[TIMEOUT >5min]\n";
                 timedOut = true;
