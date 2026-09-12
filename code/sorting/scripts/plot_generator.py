@@ -18,10 +18,10 @@ df = df[df['time_ms'] >= 0]
 
 
 colores = {
-    'mergesort': '#2ecc71',
-    'quicksort': '#e74c3c',
-    'patiencesort': '#9b59b6',
-    'stdsort': '#34495e'
+    'mergesort': '#1f77b4',
+    'quicksort': '#ff7f0e',
+    'patiencesort': '#2ca02c',
+    'stdsort': '#d62728'
 }
 marcadores = {'mergesort': 'o', 'quicksort': 's', 'patiencesort': '^', 'stdsort': 'D'}
 
